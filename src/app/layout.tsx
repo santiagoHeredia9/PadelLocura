@@ -2,6 +2,7 @@
 import '@/app/global.css';
 import { ReactNode } from 'react';
 import Header from './ui/components/Header/Header';
+import Cart from '@/app/ui/components/Cart/Cart';
 
 interface LayoutProps {
     children: ReactNode;
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: LayoutProps) {
             </head>
             <body>
                 <Header />
+                <Cart />
                 {children}
             </body>
         </html>

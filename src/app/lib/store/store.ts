@@ -20,6 +20,7 @@ interface StoreState {
   cartProducts: Product[];
   productDetail: Product | null;
   appear: boolean;
+  user: any;
   fetchProducts: () => Promise<void>;
   addToCart: (product: Product, quantity: number) => void;
   filters: (brand: string, minPrice: number) => void;
@@ -30,6 +31,17 @@ interface StoreState {
   currentPage: number;
   changePage: (page: number) => void;
   changeQuantity: (id: string, quantity: number) => void;
+  register: (formData: {
+    username: string;
+    email: string;
+    phoneNumber: string;
+    password: string;
+  }) => Promise<{ success: boolean; user?: any; error?: string }>;
+  login: (formData: {
+    username: string;
+    password: string;
+  }) => Promise<{ success: boolean; user?: any; error?: string }>;
+  setUser: (user: any) => void;
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -40,6 +52,7 @@ export const useStore = create<StoreState>((set) => ({
   appear: false,
   perPages: 8,
   currentPage: 1,
+  user: null,
   fetchProducts: async () => {
     try {
       const { data } = await axios.get("/api/get-products");
@@ -127,4 +140,58 @@ export const useStore = create<StoreState>((set) => ({
       };
     });
   },
+
+  register: async (formData) => {
+    try {
+      // Asegúrate de que phoneNumber sea un string
+      const formattedData = {
+        ...formData,
+        phoneNumber: String(formData.phoneNumber), // Convertir a string
+      };
+
+      const response = await fetch("/api/create-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formattedData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        set({ user: data });
+        return { success: true, user: data };
+      } else {
+        const error = await response.json();
+        return { success: false, error: error.error };
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      return { success: false, error: "Error desconocido" };
+    }
+  },
+
+  login: async (formData) => {
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        set({ user: data });
+        localStorage.setItem("user", JSON.stringify(data));
+        return { success: true, user: data };
+      } else {
+        const error = await response.json();
+        return { success: false, error: error.error };
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      return { success: false, error: "Error desconocido" };
+    }
+  },
+  setUser: (user) => set({ user }),
 }));
