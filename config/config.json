@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "basedesanti",
+    "database": "padellocura",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "basedesanti",
+    "database": "padellocura",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "basedesanti",
+    "database": "padellocura",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}
