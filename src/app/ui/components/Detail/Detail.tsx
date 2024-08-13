@@ -8,6 +8,7 @@ import Image from 'next/image';
 import StarIcon from '@mui/icons-material/Star';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { priceStyle } from '@/app/lib/priceStyle/priceStyle';
 
 const Detail = () => {
   const params = useParams();
@@ -81,21 +82,21 @@ const Detail = () => {
       <div className="w-3/5 flex flex-col gap-10 justify-start h-[530px]">
         <h4 className='text-3xl font-semibold'>Especificaciones</h4>
         <div className='p-4 shadow-md border-x-8 border-x-indigo-400  text-lg rounded-xl'>
-          <p> <strong className='text-indigo-900 font-semibold'>Modelo: </strong>{productDetail.title}</p>
-          <p> <strong className='text-indigo-900 font-semibold'>Marca: </strong>{productDetail.brand}</p>
-          <p> <strong className='text-indigo-900 font-semibold'>Precio: </strong>${productDetail.price}</p>
-          <p> <strong className='text-indigo-900 font-semibold'>Material: </strong>{productDetail.material}</p>
-          <p> <strong className='text-indigo-900 font-semibold'>Forma: </strong>{productDetail.form}</p>
-          <p> <strong className='text-indigo-900 font-semibold'>Núcleo: </strong>{productDetail.nucleo}</p>
-          <p> <strong className='text-indigo-900 font-semibold'>Grosor: </strong>{productDetail.thickness}mm</p>
+          <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Modelo: </strong>{productDetail.title}</p>
+          <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Marca: </strong>{productDetail.brand}</p>
+          <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Precio: </strong>{priceStyle(productDetail.price)}</p>
+          <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Material: </strong>{productDetail.material}</p>
+          <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Forma: </strong>{productDetail.form}</p>
+          <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Núcleo: </strong>{productDetail.nucleo}</p>
+          <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Grosor: </strong>{productDetail.thickness}mm</p>
 
         </div>
         <div className='p-4 shadow-md border-x-8 border-x-indigo-400 rounded-xl'>
-          <h5 className='text-xl font-semibold text-indigo-900'>Descripción: </h5>
-          <p className='text-lg'>{productDetail.description}</p>
+          <h5 className='text-xl mb-2 font-semibold text-indigo-900'>Descripción: </h5>
+          <p className='text-xl'>{productDetail.description}</p>
         </div>
 
-        <button className='hover:text-white hover:bg-indigo-400 transition-all bg-indigo-900/20 rounded-xl text-lg p-1 w-1/4 z-30' onClick={() => productDetail.stock !== undefined && productDetail.stock > 0 && addToCart(productDetail, 1)}>Agregar al carrito <AddShoppingCartIcon sx={{ fontSize: 20 }} /></button>
+        <button className='hover:text-white self-center  hover:bg-indigo-400 transition-all bg-indigo-900/20 rounded-xl text-lg p-2 w-1/4 z-30' onClick={() => productDetail.stock !== undefined && productDetail.stock > 0 && addToCart(productDetail, 1)}>Agregar al carrito <AddShoppingCartIcon sx={{ fontSize: 20 }} /></button>
       </div>
       {/* Añade más detalles según sea necesario */}
     </div>

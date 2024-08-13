@@ -8,11 +8,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import Link from 'next/link';
+import { priceStyle } from '@/app/lib/priceStyle/priceStyle';
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 
 
 const CartDetail = () => {
-    const { cartProducts, removeFromCart, changeQuantity } = useStore();
+    const { cartProducts, removeFromCart, changeQuantity, user, setOrder } = useStore();
+    const ids = cartProducts.map((product) => product.id);
     const [total, setTotal] = useState(0);
 
     useEffect(() => {
@@ -20,6 +24,27 @@ const CartDetail = () => {
             cartProducts.reduce((acc, product) => acc + product.price * product.quantity!, 0)
         );
     }, [cartProducts]);
+
+    const handleBuy = async () => {
+        if (user) {
+            const products = cartProducts.map((product) => ({
+                id: product.id,
+                quantity: product.quantity || 1,  // Asegúrate de que la cantidad esté definida
+            }));
+            
+            const res = await setOrder(user.id, products, total);
+            if (res.success) {
+                removeFromCart("");
+                setTotal(0);
+                toast.success(`Se ha realizado la compra correctamente`, {
+                    position: "top-right",
+                    autoClose: 1500,
+                });
+            }
+        }
+    }
+    
+    
 
 
     return (
@@ -34,7 +59,7 @@ const CartDetail = () => {
 
                         <li key={product.id} className="flex items-center justify-center relative shadow-md rounded-xl bg-slate-100 p-8">
                             <Image src={product.thumbnail} alt={product.title} width={120} height={120} className='absolute left-0' />
-                            <p className='absolute left-32 text-lg font-semibold'>{product.title} | ${product.price}</p>
+                            <p className='absolute left-32 text-lg font-semibold'>{product.title} | {priceStyle(product.price)}</p>
                             <div className="flex justify-center items-center gap-3">
                                 <button
                                     className='flex items-center justify-center bg-indigo-600 w-7 h-7 text-white p-1 rounded-full'
@@ -61,8 +86,8 @@ const CartDetail = () => {
 
                 </ul>
                 <div className='pt-96 flex flex-col justify-center items-center gap-4'>
-                    <h3 className='text-3xl font-semibold'>Total: ${total}</h3>
-                    <button className='flex items-center justify-center bg-indigo-600 w-20 h-7 text-lg font-bold text-white p-5 rounded-lg'>Pagar</button>
+                    <h3 className='text-3xl font-semibold'>Total: {priceStyle(total)}</h3>
+                    <button onClick={handleBuy} className='flex items-center justify-center bg-indigo-600 w-20 h-7 text-lg font-bold text-white p-5 rounded-lg'>Pagar</button>
                 </div>
             </div>
         </section>

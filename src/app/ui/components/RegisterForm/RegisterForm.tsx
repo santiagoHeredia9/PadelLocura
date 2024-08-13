@@ -6,6 +6,8 @@ import { useStore } from '@/app/lib/store/store';
 import WavingHandIcon from '@mui/icons-material/WavingHand';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const Register: React.FC = () => {
@@ -32,17 +34,23 @@ const Register: React.FC = () => {
 
         if (Object.keys(errors).length > 0) {
             setErrors(errors);
-            alert('Por favor, corrija los errores antes de continuar.');
+            toast.error('Por favor, corrija los errores antes de continuar', {
+                autoClose: 1500
+            })
             return;
         }
 
         const result = await register(formData);
 
         if (result.success) {
-            alert("Registro exitoso!");
+            toast.success('Usuario registrado exitosamente', {
+                autoClose: 1500
+            });
             router.push('/login'); // Redirige al usuario a la página de login
         } else {
-            alert(`Error en el registro: ${result.error}`);
+            toast.error(`Error en el registro: ${result.error}`, {
+                autoClose: 1500
+            });
         }
     };
 

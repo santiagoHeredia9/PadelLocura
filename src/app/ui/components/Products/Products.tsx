@@ -1,19 +1,19 @@
-// src/components/Products/Products.tsx
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useStore } from '@/app/lib/store/store';
 import Image from 'next/image';
 import Link from 'next/link';
 import Pagination from '@/app/ui/components/Pagination/Pagination';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useRouter } from 'next/navigation'; // Importa useRouter para redireccionar
+import { useRouter } from 'next/navigation';
+import { priceStyle } from '@/app/lib/priceStyle/priceStyle';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Importa los estilos por defecto
+
 
 const Products = () => {
     const { products, fetchProducts, addToCart, currentPage, perPages, user } = useStore();
-    const [quantity, setQuantity] = useState([{ id: '', quantity: 0 }]);
     const router = useRouter();
 
     useEffect(() => {
@@ -25,40 +25,38 @@ const Products = () => {
     const currentProducts = products.slice(indexOfFirstPage, indexOfLastPage);
 
     const handleAddToCart = (product) => {
-
         if (!user) {
-            if (window.confirm('Debes registrarte para añadir productos al carro, ¿Quieres hacerlo?')) {
-                router.push('/register');
-            }
+            confirmAlert({
+                customUI: ({ onClose }) => {
+                    return (
+                        <div className="bg-indigo-900/70 p-8 rounded-lg shadow-lg text-center">
+                            <h1 className="text-2xl text-white font-semibold mb-4">¿Estás seguro?</h1>
+                            <p className="mb-8 text-lg text-white">Debes registrarte para añadir productos al carro.</p>
+                            <button
+                                onClick={() => {
+                                    router.push('/register');
+                                    onClose();
+                                }}
+                                className="bg-indigo-400 text-white py-2 px-4 rounded mr-4"
+                            >
+                                Sí, quiero registrarme
+                            </button>
+                            <button
+                                onClick={onClose}
+                                className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
+                            >
+                                Por el momento no
+                            </button>
+                        </div>
+                    );
+                }
+            });
             return;
         }
 
-        const currentProduct = quantity.find((q) => q.id === product.id);
-        const currentQuantity = currentProduct ? currentProduct.quantity : 0;
+        addToCart(product, 1);
 
-        // Verificar si la cantidad total (actual + nueva) supera el stock
-        if (product.stock > 0 && currentQuantity + 1 <= product.stock) {
-            // Actualizar la cantidad en el estado
-            if (currentProduct) {
-                setQuantity(quantity.map((q) =>
-                    q.id === product.id ? { ...q, quantity: q.quantity + 1 } : q
-                ));
-            } else {
-                setQuantity([...quantity, { id: product.id, quantity: 1 }]);
-            }
 
-            // Agregar el producto al carrito
-            addToCart(product, 1);
-            toast.success(`${product.title} ha sido añadido al carrito`, {
-                position: "top-right",
-                autoClose: 1500,
-            });
-        } else {
-            toast.error('El producto está fuera de stock', {
-                position: "top-right",
-                autoClose: 1500,
-            });
-        }
     };
 
     return (
@@ -86,7 +84,7 @@ const Products = () => {
                             <h2 className='text-center max-w-[200px] font-semibold text-xl'>{product.title} </h2>
                         </Link>
                         <div className="flex items-center justify-around w-full pt-4">
-                            <p className='text-center w-1/2'>${product.price}</p>
+                            <p className='text-center text-xl font-semibold text-green-700/70 w-1/2'>{priceStyle(product.price)}</p>
                             <button
                                 className='hover:text-white hover:bg-indigo-400 transition-all bg-indigo-900/20 rounded-xl p-1 w-1/4 z-30'
                                 onClick={() => handleAddToCart(product)}
@@ -98,11 +96,8 @@ const Products = () => {
                 ))}
             </ul>
             <Pagination totalItems={products.length} />
-
-
         </div>
     );
 };
-
 
 export default Products;

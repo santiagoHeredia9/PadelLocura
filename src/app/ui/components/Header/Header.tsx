@@ -9,6 +9,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useStore } from '@/app/lib/store/store';
 import { usePathname, useRouter } from 'next/navigation';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Importa los estilos por defecto
 
 const Header: React.FC = () => {
   const { appear, setAppear, user, setUser } = useStore();
@@ -34,11 +36,33 @@ const Header: React.FC = () => {
   };
 
   const handleLogOut = () => {
-    if (window.confirm('¿Deseas cerrar sesión?')) {
-      localStorage.removeItem('user');
-      setUser(null); // Limpia el estado global de usuario
-      router.push('/');
-    }
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className="bg-indigo-900/70 p-8 rounded-lg shadow-lg text-center">
+             <h1 className="text-2xl text-white font-semibold mb-4">¿Estás seguro/a?</h1>
+             <p className="mb-8 text-lg text-white">Se cerrará tu sesión.</p>
+            <button
+              onClick={() => {
+                localStorage.removeItem('user');
+                setUser(null); // Limpia el estado global de usuario
+                router.push('/');
+                onClose();
+              }}
+              className="bg-indigo-400 text-white py-2 px-4 rounded mr-4"
+            >
+              Sí
+            </button>
+            <button
+              onClick={onClose}
+              className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
+            >
+              No
+            </button>
+          </div>
+        );
+      }
+    });
   };
 
   return (

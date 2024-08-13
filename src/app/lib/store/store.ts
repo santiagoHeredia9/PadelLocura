@@ -1,6 +1,7 @@
-// src/store/store.ts
 import create from "zustand";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 interface Product {
@@ -14,13 +15,21 @@ interface Product {
   quantity?: number;
 }
 
+interface Order {
+  userId: number;
+  ProductsIds: [];
+  totalAmount: number;
+}
+
 interface StoreState {
   products: Product[];
   filteredProducts: Product[];
   cartProducts: Product[];
   productDetail: Product | null;
   appear: boolean;
+  quantity: [];
   user: any;
+  orders: Order[];
   fetchProducts: () => Promise<void>;
   addToCart: (product: Product, quantity: number) => void;
   filters: (brand: string, minPrice: number) => void;
@@ -42,12 +51,21 @@ interface StoreState {
     password: string;
   }) => Promise<{ success: boolean; user?: any; error?: string }>;
   setUser: (user: any) => void;
+  setQuantity: (quantity: []) => void;
+  setOrder: (
+    userId: any,
+    productIds: any,
+    totalAmount: any
+  ) => Promise<{ success: boolean; order?: any }>;
+  getOrders: () => Promise<void>;
 }
 
 export const useStore = create<StoreState>((set) => ({
   products: [],
   filteredProducts: [],
   cartProducts: [],
+  orders: [],
+  quantity: [],
   productDetail: null,
   appear: false,
   perPages: 8,
@@ -70,15 +88,28 @@ export const useStore = create<StoreState>((set) => ({
         const updatedCartProducts = state.cartProducts.map(
           (cartProduct, index) => {
             if (index === existingProductIndex) {
+              const newQuantity = cartProduct.quantity! + quantity;
+              if (
+                cartProduct.stock !== undefined &&
+                newQuantity > cartProduct.stock
+              ) {
+                toast.error(
+                  "No puedes agregar más productos de los que hay en stock.",
+                  {
+                    autoClose: 1500,
+                  }
+                );
+                return cartProduct;
+              }
+              toast.success("Producto agregado al carrito", {
+                autoClose: 1500,
+              });
               return {
                 ...cartProduct,
-                quantity:
-                  cartProduct.stock! &&
-                  cartProduct.stock >= cartProduct.quantity!
-                    ? cartProduct.quantity! + quantity
-                    : quantity,
+                quantity: newQuantity,
               };
             }
+
             return cartProduct;
           }
         );
@@ -86,6 +117,9 @@ export const useStore = create<StoreState>((set) => ({
           cartProducts: updatedCartProducts,
         };
       } else {
+        toast.success("Producto agregado al carrito", {
+          autoClose: 1500,
+        });
         return {
           cartProducts: [...state.cartProducts, { ...product, quantity }],
         };
@@ -121,10 +155,11 @@ export const useStore = create<StoreState>((set) => ({
     set((state) => {
       const updatedCartProducts = state.cartProducts.map((product) => {
         if (product.id === id) {
-          // Verifica que la nueva cantidad no exceda el stock disponible
           const newQuantity = product.quantity! + quantity;
           if (product.stock !== undefined && newQuantity > product.stock) {
-            alert("No puedes agregar más productos de los que hay en stock.");
+            toast.error(
+              "No puedes agregar más productos de los que hay en stock."
+            );
             return product;
           }
           return {
@@ -143,10 +178,9 @@ export const useStore = create<StoreState>((set) => ({
 
   register: async (formData) => {
     try {
-      // Asegúrate de que phoneNumber sea un string
       const formattedData = {
         ...formData,
-        phoneNumber: String(formData.phoneNumber), // Convertir a string
+        phoneNumber: String(formData.phoneNumber),
       };
 
       const response = await fetch("/api/create-user", {
@@ -194,4 +228,34 @@ export const useStore = create<StoreState>((set) => ({
     }
   },
   setUser: (user) => set({ user }),
+
+  setQuantity: (quantity) => set({ quantity }),
+
+  setOrder: async (
+    userId: any,
+    products: { id: number; quantity: number }[],
+    totalAmount: any
+  ) => {
+    try {
+      const { data } = await axios.post("/api/create-order", {
+        userId,
+        products,
+        totalAmount,
+      });
+      set((state) => ({ orders: [...state.orders, data] }));
+      return { success: true, order: data };
+    } catch (error) {
+      console.error(error);
+      return { success: false, order: undefined };
+    }
+  },
+
+  getOrders: async () => {
+    try {
+      const { data } = await axios.get("/api/get-orders");
+      set({ orders: data });
+    } catch (error) {
+      console.error(error);
+    }
+  },
 }));

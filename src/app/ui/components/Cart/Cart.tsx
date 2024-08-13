@@ -13,7 +13,7 @@ const Cart = () => {
   const { cartProducts, removeFromCart, appear, setAppear } = useStore();
   const handleRemove = (id: string) => {
     removeFromCart(id);
-    toast.success(`Se ha sido eliminado correctamente`, {
+    toast.success(`Se ha eliminado correctamente`, {
       position: "top-right",
       autoClose: 1500,
   });

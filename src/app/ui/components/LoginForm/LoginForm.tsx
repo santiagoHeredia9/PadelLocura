@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState } from 'react';
-import { validateLogin} from "@/app/lib/validations/loginValidations"
+import { validateLogin } from "@/app/lib/validations/loginValidations"
 import { useStore } from '@/app/lib/store/store';
 import WavingHandIcon from '@mui/icons-material/WavingHand';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const Login: React.FC = () => {
@@ -30,7 +32,9 @@ const Login: React.FC = () => {
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
-      alert('Por favor, corrija los errores antes de continuar.');
+      toast.error('Por favor, corrija los errores antes de continuar', {
+        autoClose: 1500
+      })
       return;
     }
 
@@ -38,12 +42,16 @@ const Login: React.FC = () => {
 
     const result = await login(formData);
     if (result.success) {
-      alert("Bienvenido!");
+      toast.success('Bienvenido', {
+        autoClose: 1500
+      })
       localStorage.setItem('user', JSON.stringify(result.user));
       router.push('/dashboard-user'); // Redirige al usuario a la página de dashboard o a donde quieras
-  } else {
-      alert(`Error en el inicio de sesión: ${result.error}`);
-  }
+    } else {
+      toast.error('Error en el inicio de sesión', {
+        autoClose: 1500
+      });
+    }
   };
 
   return (
