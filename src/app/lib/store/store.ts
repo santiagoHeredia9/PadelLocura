@@ -73,8 +73,8 @@ export const useStore = create<StoreState>((set) => ({
               return {
                 ...cartProduct,
                 quantity:
-                  cartProduct.stock !== undefined &&
-                  cartProduct.stock > cartProduct.quantity!
+                  cartProduct.stock! &&
+                  cartProduct.stock >= cartProduct.quantity!
                     ? cartProduct.quantity! + quantity
                     : quantity,
               };

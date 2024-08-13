@@ -1,17 +1,20 @@
 // src/components/Products/Products.tsx
 "use client";
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStore } from '@/app/lib/store/store';
 import Image from 'next/image';
 import Link from 'next/link';
 import Pagination from '@/app/ui/components/Pagination/Pagination';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation'; // Importa useRouter para redireccionar
 
 const Products = () => {
     const { products, fetchProducts, addToCart, currentPage, perPages, user } = useStore();
-    const router = useRouter(); // Crea una instancia de useRouter
+    const [quantity, setQuantity] = useState([{ id: '', quantity: 0 }]);
+    const router = useRouter();
 
     useEffect(() => {
         fetchProducts();
@@ -19,20 +22,42 @@ const Products = () => {
 
     const indexOfLastPage = currentPage * perPages;
     const indexOfFirstPage = indexOfLastPage - perPages;
-    const currentProducts = products.slice(
-        indexOfFirstPage,
-        indexOfLastPage
-    );
+    const currentProducts = products.slice(indexOfFirstPage, indexOfLastPage);
 
-    const handleAddToCart = (product: any) => {
+    const handleAddToCart = (product) => {
+
         if (!user) {
             if (window.confirm('Debes registrarte para añadir productos al carro, ¿Quieres hacerlo?')) {
-                router.push('/register'); // Redirige al usuario a la página de registro
+                router.push('/register');
             }
             return;
         }
-        if (product.stock !== undefined && product.stock > 0) {
+
+        const currentProduct = quantity.find((q) => q.id === product.id);
+        const currentQuantity = currentProduct ? currentProduct.quantity : 0;
+
+        // Verificar si la cantidad total (actual + nueva) supera el stock
+        if (product.stock > 0 && currentQuantity + 1 <= product.stock) {
+            // Actualizar la cantidad en el estado
+            if (currentProduct) {
+                setQuantity(quantity.map((q) =>
+                    q.id === product.id ? { ...q, quantity: q.quantity + 1 } : q
+                ));
+            } else {
+                setQuantity([...quantity, { id: product.id, quantity: 1 }]);
+            }
+
+            // Agregar el producto al carrito
             addToCart(product, 1);
+            toast.success(`${product.title} ha sido añadido al carrito`, {
+                position: "top-right",
+                autoClose: 1500,
+            });
+        } else {
+            toast.error('El producto está fuera de stock', {
+                position: "top-right",
+                autoClose: 1500,
+            });
         }
     };
 
@@ -73,8 +98,11 @@ const Products = () => {
                 ))}
             </ul>
             <Pagination totalItems={products.length} />
+
+
         </div>
     );
 };
+
 
 export default Products;

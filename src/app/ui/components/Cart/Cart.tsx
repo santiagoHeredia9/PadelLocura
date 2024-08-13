@@ -5,9 +5,19 @@ import { useStore } from '@/app/lib/store/store';
 import Link from 'next/link';
 import Image from 'next/image';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Cart = () => {
   const { cartProducts, removeFromCart, appear, setAppear } = useStore();
+  const handleRemove = (id: string) => {
+    removeFromCart(id);
+    toast.success(`Se ha sido eliminado correctamente`, {
+      position: "top-right",
+      autoClose: 1500,
+  });
+  }
 
   return (
     <>
@@ -35,7 +45,7 @@ const Cart = () => {
               <Image className='bg-white rounded-full shadow-xl absolute left-5' src={product.thumbnail} alt={product.name} width={50} height={50} />
               <p className='absolute left-16 bg-blue-900 text-[#FFF5E1] h-6 w-6 text-center rounded-full'>{product.quantity}</p>
               <p className='font-bold text-center'>{product.title}</p>
-              <button className='absolute right-10' onClick={() => removeFromCart(product.id)}><DeleteIcon className='hover:text-red-500' /></button>
+              <button className='absolute right-10' onClick={() => handleRemove(product.id) }><DeleteIcon className='hover:text-red-500' /></button>
             </li>
           )) : (<p className=' font-semibold bg-yellow-400/70 p-2 text-[#862B0D] rounded-lg' style={{ border: "1px solid  #862B0D" }}>No hay productos aun...</p>)}
           <Link href="/cart-detail " >
@@ -46,6 +56,7 @@ const Cart = () => {
         </ul>
 
       </div>
+
     </>
   );
 };
