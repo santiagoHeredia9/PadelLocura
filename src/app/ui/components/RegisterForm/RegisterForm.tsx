@@ -55,7 +55,7 @@ const Register: React.FC = () => {
     };
 
     return (
-        <div className="flex justify-center items-center h-screen bg-gradient-to-t
+        <div className="flex flex-col lg:flex-row justify-center items-center h-full pt-36 lg:pt-0 lg:h-screen  bg-gradient-to-t
                              from-blue-600/30 from-10% via-indigo-500/20 via-20% to-slate-300/20 to-90%">
             <form onSubmit={handleSubmit} className='bg-white p-10 rounded-xl flex flex-col justify-center items-center w-[500px] h-[600px] border-y-8 border-slate-500 shadow-md '>
                 <div className='flex flex-col w-3/4 h-1/5 relative '>
@@ -126,7 +126,7 @@ const Register: React.FC = () => {
                 <button className='bg-indigo-400 mt-3 hover:bg-indigo-700 transition-all text-white font-bold py-2 px-4 rounded' type="submit">Registrarse</button>
             </form>
 
-            <div className='self-end mb-48 ml-10 bg-white p-10 rounded-xl flex flex-col justify-center items-center border-l-2 border-slate-500 shadow-md'>
+            <div className='lg:self-end mb-48 lg:ml-10 mt-5 lg:mt-0 bg-white p-10 rounded-xl flex flex-col justify-center items-center border-l-2 border-slate-500 shadow-md'>
                 <p className='font-semibold text-lg'>¡Ya tengo una cuenta! <WavingHandIcon className='text-slate-400' /> </p>
                 <Link className=' hover:text-indigo-400 transition-all mt-3  font-bold text-indigo-500' href="/login">Inicia sesión</Link>
             </div>

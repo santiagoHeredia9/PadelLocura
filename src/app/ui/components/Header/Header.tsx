@@ -1,7 +1,7 @@
 // src/components/Header.tsx
 "use client";
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import HomeIcon from '@mui/icons-material/Home';
@@ -13,9 +13,10 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Importa los estilos por defecto
 
 const Header: React.FC = () => {
-  const { appear, setAppear, user, setUser } = useStore();
+  const { appear, setAppear, user, setUser, cartProducts } = useStore();
   const pathname = usePathname();
   const router = useRouter();
+  const [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
     // Sincroniza el estado del usuario con localStorage al montar el componente
@@ -24,6 +25,10 @@ const Header: React.FC = () => {
       setUser(JSON.parse(storedUser));
     }
   }, [setUser]);
+
+  useEffect(() => {
+    setQuantity(cartProducts.length);
+  }, [cartProducts]);
 
   const handleAccountClick = () => {
     if (user && Object.keys(user).length > 0) {
@@ -40,12 +45,13 @@ const Header: React.FC = () => {
       customUI: ({ onClose }) => {
         return (
           <div className="bg-indigo-900/70 p-8 rounded-lg shadow-lg text-center">
-             <h1 className="text-2xl text-white font-semibold mb-4">¿Estás seguro/a?</h1>
-             <p className="mb-8 text-lg text-white">Se cerrará tu sesión.</p>
+            <h1 className="text-2xl text-white font-semibold mb-4">¿Estás seguro/a?</h1>
+            <p className="mb-8 text-lg text-white">Se cerrará tu sesión.</p>
             <button
               onClick={() => {
                 localStorage.removeItem('user');
                 setUser(null); // Limpia el estado global de usuario
+                setQuantity(0);
                 router.push('/');
                 onClose();
               }}
@@ -65,8 +71,10 @@ const Header: React.FC = () => {
     });
   };
 
+
+
   return (
-    <header className={`bg-gray-800 text-white p-4 max-w-2xl rounded-full fixed ${pathname !== '/cart-detail' ? 'left-1/2 transform -translate-x-1/2' : 'left-64'} top-2`}>
+    <header className={`bg-gray-800 text-white p-4 max-w-2xl rounded-full fixed ${pathname !== '/cart-detail' ? 'left-1/2 transform -translate-x-1/2' : 'lg:left-64 sm:left-36'} top-2 z-40`}>
       <nav>
         <ul className="flex space-x-4">
           <li>
@@ -79,6 +87,7 @@ const Header: React.FC = () => {
             pathname !== '/cart-detail' &&
             <li>
               <a className="hover:text-gray-400 cursor-pointer" onClick={() => setAppear(!appear)}><ShoppingCartIcon /></a>
+              {quantity > 0 && <p className='absolute left-16 top-1 bg-rose-600/90 text-[#FFF5E1] h-6 w-6 text-center rounded-full'>{quantity}</p>}
             </li>
           }
 

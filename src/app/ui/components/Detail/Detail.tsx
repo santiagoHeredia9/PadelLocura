@@ -119,13 +119,16 @@ const Detail = () => {
         <Image className='animate-bounce absolute right-0 top-0' src={"https://res.cloudinary.com/dwsgd46gi/image/upload/v1723461463/ball_hatzcf.png"} alt="Product" width={50} height={50} />
 
         <p className={`text-lg p-1 rounded-lg flex items-center justify-center ${ratingTypeColor(productDetail.rating)}`}>{ratingStars(productDetail.rating)}</p>
+        <button className='absolute -bottom-20  hover:text-white self-center  hover:bg-indigo-400 transition-all bg-indigo-900/20 rounded-xl text-lg p-2 w-44 h-16 z-50' onClick={() => handleAddToCart(productDetail)}><AddShoppingCartIcon sx={{ fontSize: 30 }} /></button>
       </div>
+
       <div className="w-3/5 flex flex-col gap-10 justify-start h-[530px]">
         <h4 className='text-3xl font-bold'>Especificaciones</h4>
         <div className='p-4 shadow-md border-x-8 border-x-indigo-400 bg-white text-lg rounded-xl'>
           <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Modelo: </strong>{productDetail.title}</p>
           <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Marca: </strong>{productDetail.brand}</p>
           <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Precio: </strong>{priceStyle(productDetail.price)}</p>
+          <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Stock: </strong>{productDetail.stock}</p>
           <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Material: </strong>{productDetail.material}</p>
           <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Forma: </strong>{productDetail.form}</p>
           <p className='text-xl'> <strong className='mr-1 text-indigo-900 text-xl font-semibold'>Núcleo: </strong>{productDetail.nucleo}</p>
@@ -137,7 +140,7 @@ const Detail = () => {
           <p className='text-xl'>{productDetail.description}</p>
         </div>
 
-        <button className='hover:text-white self-center  hover:bg-indigo-400 transition-all bg-indigo-900/20 rounded-xl text-lg p-2 w-1/4 z-30' onClick={() => handleAddToCart(productDetail)}>Agregar al carrito <AddShoppingCartIcon sx={{ fontSize: 20 }} /></button>
+
       </div>
       {/* Añade más detalles según sea necesario */}
     </div>

@@ -32,7 +32,7 @@ interface StoreState {
   orders: Order[];
   fetchProducts: () => Promise<void>;
   addToCart: (product: Product, quantity: number) => void;
-  filters: (brand: string, minPrice: number) => void;
+  filters: (brand: string) => void;
   detail: (id: string) => Promise<void>;
   setAppear: (appear: boolean) => void;
   removeFromCart: (id: string) => void;
@@ -58,6 +58,7 @@ interface StoreState {
     totalAmount: any
   ) => Promise<{ success: boolean; order?: any }>;
   getOrders: () => Promise<void>;
+  resetPage: () => void;
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -126,15 +127,7 @@ export const useStore = create<StoreState>((set) => ({
       }
     });
   },
-  filters: (brand, minPrice) => {
-    set((state) => ({
-      filteredProducts: state.products.filter(
-        (product) =>
-          product.price >= minPrice &&
-          (brand === "all" || product.brand === brand)
-      ),
-    }));
-  },
+
   detail: async (id) => {
     try {
       const { data } = await axios.get(`/api/get-detail/${id}`);
@@ -258,4 +251,13 @@ export const useStore = create<StoreState>((set) => ({
       console.error(error);
     }
   },
+  filters: async (brand) => {
+    try {
+      const { data } = await axios.get(`/api/get-brand?brand=${brand}`);
+      set({ filteredProducts: data });
+    } catch (error) {
+      console.error("Error filtering products by brand:", error);
+    }
+  },
+  resetPage: () => set({ currentPage: 1 }),
 }));

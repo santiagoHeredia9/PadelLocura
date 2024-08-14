@@ -20,19 +20,19 @@ const Profile = () => {
         const product = products.find((product) => product.id === id);
         if (product) {
 
-            console.log(product);
             return product.title;
         } else {
             return "No se encontro el producto";
         }
     }
 
+    console.log(orders);
 
 
 
 
     return (
-        <section className='flex flex-col items-start pt-48  gap-10 max-w-screen-lg  h-screen' style={{ margin: "0 auto" }}>
+        <section className='flex flex-col items-start pt-32 pb-32 gap-10 max-w-screen-lg h-full' style={{ margin: "0 auto" }}>
             <div className='flex gap-5 w-full'>
                 <div className='bg-white border border-indigo-950/10 flex flex-col h-[300px] gap-3 p-16 rounded-xl shadow-md w-1/2 shadow-indigo-300'>
                     <h2 className='text-2xl  font-semibold text-indigo-500' >Mi perfil</h2>
@@ -49,21 +49,17 @@ const Profile = () => {
 
             <div className='bg-white border border-indigo-950/10 flex flex-col justify-center items-start gap-3 p-16 rounded-xl w-full shadow-md shadow-indigo-300'>
                 <h2 className='text-2xl font-semibold text-indigo-500'>Mis pedidos</h2>
-                <ul className='grid grid-cols-2 gap-3'>
+                <ul className='flex flex-col gap-3 w-[100%]'>
                     {orders?.map((order) => (
                         <div className='p-4 bg-indigo-100 border border-indigo-500/20 rounded-xl w-[100%] flex flex-col justify-start items-start' key={order.id} >
-                            <div className='flex gap-2'>
-                                <li className='text-xl'>Orden: {order.id}</li>
-                                <li className='text-xl'>Usuario: {order.userId}</li>
-                            </div>
-                            <div className='flex gap-2'>
-                                <li className='text-xl flex gap-2 '>{order.products && order.products.length > 1 ? "Productos:" : "Producto:"} {order.products && order.products.map((product) => <p key={product.productId}>{productNames(product.productId)}</p>)}</li>
 
-                            </div>
-                            <div>
-                                <li className='text-xl'>Total: {priceStyle(order.totalAmount)}</li>
-                            </div>
+                            <li className='text-xl text-slate-600 font-semibold'>Orden: {order.id}</li>
+                            <li className='text-xl text-slate-600 font-semibold'>Usuario: {order && order?.user?.username}</li>
+                            <li className='text-xl text-slate-600 font-semibold'>Total: <strong className='text-indigo-500 text-md font-semibold'>{priceStyle(order.totalAmount)}</strong></li>
 
+                            <div className='flex gap-2'>
+                                <li className='text-xl text-slate-600 font-semibold flex gap-2 '>{order.products && order.products.length > 1 ? "Productos:" : "Producto:"} {order.products && order.products.map((product) => <p key={product.productId}>{productNames(product.productId)}<strong className='text-indigo-500 font-semibold text-md'>{" x" + product.quantity}</strong>.</p>)}</li>
+                            </div>
 
                         </div>
                     ))}

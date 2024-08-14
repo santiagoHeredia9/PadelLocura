@@ -13,7 +13,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'; // Importa los estilos
 
 
 const Products = () => {
-    const { products, fetchProducts, addToCart, currentPage, perPages, user } = useStore();
+    const { filteredProducts, fetchProducts, addToCart, currentPage, perPages, user } = useStore();
     const router = useRouter();
 
     useEffect(() => {
@@ -22,7 +22,7 @@ const Products = () => {
 
     const indexOfLastPage = currentPage * perPages;
     const indexOfFirstPage = indexOfLastPage - perPages;
-    const currentProducts = products.slice(indexOfFirstPage, indexOfLastPage);
+    const currentProducts = filteredProducts.slice(indexOfFirstPage, indexOfLastPage);
 
     const handleAddToCart = (product) => {
         if (!user) {
@@ -60,11 +60,12 @@ const Products = () => {
     };
 
     return (
-        <div className="flex pt-20 items-center gap-14 mt-10 flex-col">
-            <ul className="grid grid-cols-4 gap-10">
+        <div className="flex lg:pt-20 pt-48 items-center gap-14 mt-10 flex-col">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
                 {currentProducts && currentProducts.map((product) => (
                     <li
                         className={`
+                           group
                            flex 
                            flex-col
                            items-center
@@ -76,6 +77,7 @@ const Products = () => {
                            rounded-xl shadow-md 
                            transition-all 
                            hover:-translate-y-2 hover:bg-cyan-900/20 hover:shadow-xl
+                           relative
                         `}
                         key={product.id}
                     >
@@ -83,6 +85,7 @@ const Products = () => {
                             <Image src={product.thumbnail} alt={product.title} width={200} height={200} />
                             <h2 className='text-center max-w-[200px] font-semibold text-xl'>{product.title} </h2>
                         </Link>
+                        <p className=' text-md font-semibold text-slate-600 absolute top-2 left-0 bg-white p-2 rounded-xl rounded-l-none lg:transition-opacity lg:duration-300 lg:opacity-0 lg:group-hover:opacity-100'>Stock: {product.stock}</p>
                         <div className="flex items-center justify-around w-full pt-4">
                             <p className='text-center text-xl font-semibold text-green-700/70 w-1/2'>{priceStyle(product.price)}</p>
                             <button
@@ -95,7 +98,7 @@ const Products = () => {
                     </li>
                 ))}
             </ul>
-            <Pagination totalItems={products.length} />
+            <Pagination totalItems={filteredProducts.length} />
         </div>
     );
 };
