@@ -18,7 +18,7 @@ const Products = () => {
 
     useEffect(() => {
         fetchProducts();
-    }, [fetchProducts]);
+    }, []);
 
     const indexOfLastPage = currentPage * perPages;
     const indexOfFirstPage = indexOfLastPage - perPages;
@@ -70,12 +70,12 @@ const Products = () => {
                            items-center
                            justify-center
                            bg-gradient-to-b
-                         from-blue-600/30 from-10% via-indigo-500/20 via-20% to-slate-300/20 to-90%
+                         from-blue-600/30 from-10% via-indigo-500/20 via-20% to-white to-90%
                            backdrop-blur-0 
                            h-[300px] w-[300px] 
-                           rounded-xl shadow-xl 
+                           rounded-xl shadow-md 
                            transition-all 
-                           hover:-translate-y-2 hover:bg-cyan-900/20
+                           hover:-translate-y-2 hover:bg-cyan-900/20 hover:shadow-xl
                         `}
                         key={product.id}
                     >

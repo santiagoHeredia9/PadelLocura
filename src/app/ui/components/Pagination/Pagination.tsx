@@ -20,37 +20,38 @@ const Pagination: React.FC<PaginationProps> = ({ totalItems }) => {
     };
 
     return (
-        <ButtonGroup className='fixed bottom-10'>
+        <ButtonGroup className='fixed bottom-10 justify-center items-center flex gap-1 border-none rounded-2xl'>
             <Button
                 sx={{
                     ":hover": {
-                        backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                        borderColor: 'rgb(159, 112, 253)',
+                        border: 'none',
                     },
                     minWidth: '40px',
                     padding: '8px',
                     borderRadius: '100%',
-                    borderColor: 'rgb(159, 112, 253)',
-                    
+                    borderColor: 'transparent',
+                    border: 'none',
                 }}
                 disabled={currentPage === 1}
                 onClick={() => handleChangePage(currentPage - 1)}
             >
-                <ArrowCircleLeftIcon sx={{ color: currentPage === 1 ? 'gray' : 'rgb(159, 112, 253)' }} />
+                <ArrowCircleLeftIcon sx={{ color: currentPage === 1 ? 'gray' : 'rgb(48, 68, 99)', height: '40px', width: '40px', ":hover": { color: 'rgb(10, 68, 99)' } }} />
             </Button>
             {Array.from({ length: totalPages }, (_, index) => (
                 <Button
                     key={index + 1}
                     sx={{
+                        border: 'none',
                         borderRadius: '100%',
                         minWidth: '40px',
+                        height: '40px',
                         padding: '8px',
-                        color: currentPage === index + 1 ? '#fff' : 'rgb(159, 112, 253)',
-                        borderColor: 'rgb(159, 112, 253)',
-                        backgroundColor: currentPage === index + 1 ? 'rgb(159, 112, 253)' : 'transparent',
+                        color: currentPage === index + 1 ? '#fff' : 'rgb(48, 68, 99)',
+                        borderColor: 'rgb(48, 68, 99)',
+                        backgroundColor: currentPage === index + 1 ? 'rgb(48, 68, 99)' : 'transparent',
                         ":hover": {
-                            backgroundColor: currentPage === index + 1 ? 'rgb(159, 112, 253)' :  'rgba(0, 0, 0, 0.04)',
-                            borderColor: 'rgb(159, 112, 253)'
+                            backgroundColor: currentPage === index + 1 ? 'rgb(48, 68, 99)' : 'rgba(0, 0, 0, 0.04)',
+                            border: 'none',
                         },
                     }}
                     onClick={() => handleChangePage(index + 1)}
@@ -63,18 +64,20 @@ const Pagination: React.FC<PaginationProps> = ({ totalItems }) => {
                 sx={{
 
                     ":hover": {
-                        backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                        borderColor: 'rgb(159, 112, 253)'
+                        border: 'none',
                     },
                     minWidth: '40px',
                     padding: '8px',
                     borderRadius: '100%',
-                    borderColor: 'rgb(159, 112, 253)',
+                    borderColor: "transparent",
+                    border: 'none',
+
+
                 }}
                 disabled={currentPage === totalPages}
                 onClick={() => handleChangePage(currentPage + 1)}
             >
-                <ArrowCircleRightIcon sx={{ color: currentPage === totalPages ? 'gray' : 'rgb(159, 112, 253)' }} />
+                <ArrowCircleRightIcon sx={{ color: currentPage === totalPages ? 'gray' : 'rgb(48, 68, 99)', width: '40px', height: '40px', ":hover": { color: 'rgb(10, 68, 99)' } }} />
             </Button>
         </ButtonGroup>
     );

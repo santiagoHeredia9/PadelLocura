@@ -57,7 +57,7 @@ const CartDetail = () => {
                 <ul className="flex flex-col gap-10 mt-20 w-[70%]   ">
                     {cartProducts && cartProducts.length > 0 ? cartProducts.map((product) => (
 
-                        <li key={product.id} className="flex items-center justify-center relative shadow-md rounded-xl bg-slate-100 p-8">
+                        <li key={product.id} className="flex items-center justify-center relative shadow-md rounded-xl bg-white p-8">
                             <Image src={product.thumbnail} alt={product.title} width={120} height={120} className='absolute left-0' />
                             <p className='absolute left-32 text-lg font-semibold'>{product.title} | {priceStyle(product.price)}</p>
                             <div className="flex justify-center items-center gap-3">

@@ -10,13 +10,14 @@ interface LayoutProps {
 }
 
 export default function RootLayout({ children }: LayoutProps) {
+
     return (
         <html lang="en">
             <head>
                 <title>My App</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </head>
-            <body>
+            <body className={`bg-slate-200/50`}>
                 <ToastContainer />
                 <Header />
                 <Cart />
