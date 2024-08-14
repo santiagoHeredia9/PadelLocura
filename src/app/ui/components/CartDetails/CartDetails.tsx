@@ -54,7 +54,7 @@ const CartDetail = () => {
                         <li
                             key={product.id}
                             className="flex flex-col sm:flex-row items-center justify-between shadow-md rounded-xl w- bg-white p-8 gap-4">
-                            <Image src={product.thumbnail} alt={product.title} width={120} height={120} className='sm:w-32' />
+                            <Image src={typeof product.thumbnail === "string" ? product.thumbnail : `${product.thumbnail}`} alt={product.title} width={120} height={120} className='sm:w-32' />
                             <div className="flex flex-col sm:flex-grow">
                                 <p className='text-lg font-semibold'>{product.title} | {priceStyle(product.price)}</p>
                                 <div className="flex justify-center sm:justify-start items-center gap-3 mt-2">

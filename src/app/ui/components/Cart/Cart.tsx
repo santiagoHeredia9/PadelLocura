@@ -42,7 +42,7 @@ const Cart = () => {
           <h2 className="text-xl text-[#FFF5E1] p-2 font-bold bg-blue-950 w-full text-left fixed top-0" style={{ borderTopLeftRadius: "10px" }}>Mi carrito</h2>
           {cartProducts.length > 0 && cartProducts ? cartProducts.map((product) => (
             <li key={product.id} className='flex items-center justify-around w-full'>
-              <Image className='bg-white rounded-full shadow-xl absolute left-5' src={product.thumbnail} alt={product.name} width={50} height={50} />
+              <Image className='bg-white rounded-full shadow-xl absolute left-5' src={typeof product.thumbnail === "string" ? product.thumbnail : `${product.thumbnail}`} alt={product.name} width={50} height={50} />
               <p className='absolute left-16 bg-blue-900 text-[#FFF5E1] h-6 w-6 text-center rounded-full'>{product.quantity}</p>
               <p className='font-bold text-center'>{product.title}</p>
               <button className='absolute right-10' onClick={() => handleRemove(product.id) }><DeleteIcon className='hover:text-red-500' /></button>

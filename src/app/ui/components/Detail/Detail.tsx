@@ -70,7 +70,7 @@ const Detail = () => {
     return <div>Loading...</div>;
   }
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (product: any) => {
     if (!user) {
       confirmAlert({
         customUI: ({ onClose }) => {
@@ -115,7 +115,7 @@ const Detail = () => {
         ${ratingTypeFade(productDetail.rating)}
          backdrop-blur-0 rounded-xl
         `} >
-        <Image src={productDetail.thumbnail} alt="Product" width={500} height={500} />
+       <Image src={typeof productDetail.thumbnail === 'string' ? productDetail.thumbnail : `${productDetail.thumbnail}`} alt="Product" width={500} height={500} />
         <Image className='animate-bounce absolute right-0 top-0' src={"https://res.cloudinary.com/dwsgd46gi/image/upload/v1723461463/ball_hatzcf.png"} alt="Product" width={50} height={50} />
 
         <p className={`text-lg p-1 rounded-lg flex items-center justify-center ${ratingTypeColor(productDetail.rating)}`}>{ratingStars(productDetail.rating)}</p>

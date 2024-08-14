@@ -8,7 +8,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+interface Errors {
+    username?: string;
+    password?: string;
+    confirmPassword?: string;
+    email?: string;
+    phoneNumber?: string;
+}
+  
 
 const Register: React.FC = () => {
     const router = useRouter(); // Inicializa useRouter
@@ -21,7 +28,7 @@ const Register: React.FC = () => {
         confirmPassword: "",
     })
 
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState<Errors>({});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

@@ -1,10 +1,18 @@
-import create from "zustand";
+import { create } from "zustand";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import Image from 'next/image';
+type StaticImport = typeof Image;
+import { ReactNode } from "react";
 
 interface Product {
+  material: ReactNode;
+  form: ReactNode;
+  thickness: ReactNode;
+  nucleo: ReactNode;
+  description: ReactNode;
+  rating: number;
   stock: undefined;
   title: string;
   thumbnail: string | StaticImport;
@@ -16,6 +24,9 @@ interface Product {
 }
 
 interface Order {
+  products: boolean;
+  user: any;
+  id: ReactNode;
   userId: number;
   ProductsIds: [];
   totalAmount: number;

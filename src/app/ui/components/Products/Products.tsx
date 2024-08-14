@@ -24,7 +24,7 @@ const Products = () => {
     const indexOfFirstPage = indexOfLastPage - perPages;
     const currentProducts = filteredProducts.slice(indexOfFirstPage, indexOfLastPage);
 
-    const handleAddToCart = (product) => {
+    const handleAddToCart = (product: any) => {
         if (!user) {
             confirmAlert({
                 customUI: ({ onClose }) => {
@@ -82,7 +82,7 @@ const Products = () => {
                         key={product.id}
                     >
                         <Link href={`/detail/${product.id}`} key={product.id}>
-                            <Image src={product.thumbnail} alt={product.title} width={200} height={200} />
+                            <Image src={typeof product.thumbnail === 'string' ? product.thumbnail : `${product.thumbnail}`} alt={product.title} width={200} height={200} />
                             <h2 className='text-center max-w-[200px] font-semibold text-xl'>{product.title} </h2>
                         </Link>
                         <p className=' text-md font-semibold text-slate-600 absolute top-2 left-0 bg-white p-2 rounded-xl rounded-l-none lg:transition-opacity lg:duration-300 lg:opacity-0 lg:group-hover:opacity-100'>Stock: {product.stock}</p>

@@ -11,6 +11,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 const Login: React.FC = () => {
+  interface Errors {
+    username?: string;
+    password?: string;
+  }
   const router = useRouter(); // Inicializa useRouter
   const { login } = useStore();
   const [formData, setFormData] = useState({
@@ -19,7 +23,7 @@ const Login: React.FC = () => {
 
   })
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Errors>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

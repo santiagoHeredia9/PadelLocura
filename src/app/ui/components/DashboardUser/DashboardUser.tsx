@@ -1,7 +1,7 @@
 "use client";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { useStore } from '@/app/lib/store/store';
-import { useEffect } from 'react';
+import { Key, useEffect } from 'react';
 import { priceStyle } from '@/app/lib/priceStyle/priceStyle';
 
 
@@ -16,7 +16,7 @@ const Profile = () => {
     }, [fetchProducts, getOrders]);
 
 
-    const productNames = (id) => {
+    const productNames = (id: string) => {
         const product = products.find((product) => product.id === id);
         if (product) {
 
@@ -51,18 +51,31 @@ const Profile = () => {
                 <h2 className='text-2xl font-semibold text-indigo-500'>Mis pedidos</h2>
                 <ul className='flex flex-col gap-3 w-[100%]'>
                     {orders?.map((order) => (
-                        <div className='p-4 bg-indigo-100 border border-indigo-500/20 rounded-xl w-[100%] flex flex-col justify-start items-start' key={order.id} >
-
-                            <li className='text-xl text-slate-600 font-semibold'>Orden: {order.id}</li>
-                            <li className='text-xl text-slate-600 font-semibold'>Usuario: {order && order?.user?.username}</li>
-                            <li className='text-xl text-slate-600 font-semibold'>Total: <strong className='text-indigo-500 text-md font-semibold'>{priceStyle(order.totalAmount)}</strong></li>
-
-                            <div className='flex gap-2'>
-                                <li className='text-xl text-slate-600 font-semibold flex gap-2 '>{order.products && order.products.length > 1 ? "Productos:" : "Producto:"} {order.products && order.products.map((product) => <p key={product.productId}>{productNames(product.productId)}<strong className='text-indigo-500 font-semibold text-md'>{" x" + product.quantity}</strong>.</p>)}</li>
-                            </div>
-
+                        <div
+                            className='p-4 bg-indigo-100 border border-indigo-500/20 rounded-xl w-[100%] flex flex-col justify-start items-start'
+                            key={order.id?.toString() || "unknown"} // Convertir id a string o usar "unknown"
+                        >
+                            <ul className='text-xl text-slate-600 font-semibold'>
+                                <li>Orden: {order.id}</li>
+                                <li>Usuario: {order.user?.username}</li>
+                                <li>Total: <strong className='text-indigo-500 text-md font-semibold'>{priceStyle(order.totalAmount)}</strong></li>
+                                <li className='flex gap-2'>
+                                    {order.products && Array.isArray(order.products) && (
+                                        <div>
+                                            <span>{order.products.length > 1 ? "Productos:" : "Producto:"}</span>
+                                            {order.products.map((product) => (
+                                                <p key={product.productId?.toString() || "unknown"}>
+                                                    {productNames(product.productId!.toString())}
+                                                    <strong className='text-indigo-500 font-semibold text-md'>{" x" + product.quantity}</strong>.
+                                                </p>
+                                            ))}
+                                        </div>
+                                    )}
+                                </li>
+                            </ul>
                         </div>
                     ))}
+
                 </ul>
             </div>
         </section>
