@@ -1,4 +1,4 @@
-import Profile from "../ui/components/DashboardUser/DashboardUser";
+import Profile from "../../components/DashboardUser/DashboardUser";
 
 const DashboardUser = () => {
     return <Profile />;

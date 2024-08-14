@@ -1,6 +1,6 @@
 import React from 'react';
-import Products from '@/app/ui/components/Products/Products';
-import Filters from '@/app/ui/components/Filters/Filters';
+import Products from '@/components/Products/Products';
+import Filters from '@/components/Filters/Filters';
 
 
 

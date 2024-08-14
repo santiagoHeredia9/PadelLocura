@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useStore } from '@/app/lib/store/store';
 import Image from 'next/image';
 import Link from 'next/link';
-import Pagination from '@/app/ui/components/Pagination/Pagination';
+import Pagination from '@/components/Pagination/Pagination';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { useRouter } from 'next/navigation';
 import { priceStyle } from '@/app/lib/priceStyle/priceStyle';
@@ -18,7 +18,7 @@ const Products = () => {
 
     useEffect(() => {
         fetchProducts();
-    }, []);
+    }, [fetchProducts]);
 
     const indexOfLastPage = currentPage * perPages;
     const indexOfFirstPage = indexOfLastPage - perPages;

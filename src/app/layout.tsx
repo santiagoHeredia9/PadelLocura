@@ -1,8 +1,8 @@
 // app/layout.tsx
 import '@/app/global.css';
 import { ReactNode } from 'react';
-import Header from './ui/components/Header/Header';
-import Cart from '@/app/ui/components/Cart/Cart';
+import Header from '../components/Header/Header';
+import Cart from '@/components/Cart/Cart';
 import { ToastContainer } from "react-toastify"
 
 interface LayoutProps {

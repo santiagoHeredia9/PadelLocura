@@ -1,4 +1,4 @@
-import Detail from '@/app/ui/components/Detail/Detail';
+import Detail from '@/components/Detail/Detail';
 
 export default function DetailPage() {
   return <Detail />;
