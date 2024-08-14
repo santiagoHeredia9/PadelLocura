@@ -1,14 +1,14 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model Product {
-  id          Int          @id @default(autoincrement())
+  id          Int            @id @default(autoincrement())
   title       String
   description String?
   price       Float
@@ -21,39 +21,39 @@ model Product {
   stock       Int
   brand       String?
   thumbnail   String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
   orders      OrderProduct[]
 }
 
 model Users {
-  id             Int      @id @default(autoincrement())
-  username       String   @unique
-  email          String   @unique
-  phoneNumber    String?
-  password       String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  orders         Order[]  
+  id          Int      @id @default(autoincrement())
+  username    String   @unique
+  email       String   @unique
+  phoneNumber String?
+  password    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  orders      Order[]
 }
 
 model Order {
-  id          Int          @id @default(autoincrement())
-  user        Users        @relation(fields: [userId], references: [id])
+  id          Int            @id @default(autoincrement())
   userId      Int
   totalAmount Float
   status      String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  products    OrderProduct[] 
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  user        Users          @relation(fields: [userId], references: [id])
+  products    OrderProduct[]
 }
 
 model OrderProduct {
-  order      Order   @relation(fields: [orderId], references: [id])
-  orderId    Int
-  product    Product @relation(fields: [productId], references: [id])
-  productId  Int
-  quantity   Int     // Añade este campo para almacenar la cantidad del producto en la orden
+  orderId   Int
+  productId Int
+  quantity  Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
 
-  @@id([orderId, productId]) 
+  @@id([orderId, productId])
 }
